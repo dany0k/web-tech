@@ -15,6 +15,7 @@ public class TechApplication {
         ApplicationContext context = new AnnotationConfigApplicationContext(TechApplication.class);
         DataService data = context.getBean(DataService.class);
         data.insertData();
+        data.printTable();
     }
 
 }

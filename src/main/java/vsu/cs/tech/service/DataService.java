@@ -71,19 +71,43 @@ public class DataService {
         for (int i = startIndex; i < pairsAmount; i++) {
             Document document = new Document("group_id", groupList.get(i).get("_id"))
                     .append("subject_id", subjectList.get(i).get("_id"))
-                    .append("time_series", new Date())
+                    .append("date", new Date())
                     .append("_id", new ObjectId());
             pairsList.add(document);
         }
         pairsCollection.insertMany(pairsList);
     }
-    public void test(){
-        FindIterable<Document> result = mongoTemplate.getCollection("test").find();
-        MongoCursor<Document> cursor = result.iterator();
-        System.out.println("Start of the table");
-        while (cursor.hasNext()){
-            Document doc = cursor.next();
-            System.out.println(doc.get("name"));
+    public void printTable() {
+        FindIterable<Document> groupCollection = mongoTemplate.getCollection("Group").find();
+        MongoCursor<Document> cursor = groupCollection.iterator();
+        System.out.println("---------Group Collection---------");
+        while (cursor.hasNext()) {
+            Document document = cursor.next();
+            System.out.println("group_id " + document.get("group_id"));
+            System.out.println("number " + document.get("number"));
+            System.out.println();
+        }
+
+        FindIterable<Document> subjectCollection = mongoTemplate.getCollection("Subject").find();
+        cursor = subjectCollection.iterator();
+        System.out.println("---------Subject Collection---------");
+        while (cursor.hasNext()) {
+            Document document = cursor.next();
+            System.out.println("subject_id " + document.get("subject_id"));
+            System.out.println("name " + document.get("name"));
+            System.out.println("description " + document.get("description"));
+            System.out.println();
+        }
+
+        FindIterable<Document> pairsCollection = mongoTemplate.getCollection("Pairs").find();
+        cursor = pairsCollection.iterator();
+        System.out.println("---------Pairs Collection---------");
+        while (cursor.hasNext()) {
+            Document document = cursor.next();
+            System.out.println("group_id " + document.get("group_id"));
+            System.out.println("subject_id " + document.get("subject_id"));
+            System.out.println("date " + document.get("date"));
+            System.out.println();
         }
     }
 }
