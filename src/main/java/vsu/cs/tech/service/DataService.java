@@ -3,13 +3,20 @@ package vsu.cs.tech.service;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Indexes;
+import com.mongodb.client.model.TextSearchOptions;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.print.Doc;
 import java.util.*;
+
+import static com.mongodb.client.model.Filters.eq;
 
 @Service
 public class DataService {
@@ -24,7 +31,8 @@ public class DataService {
         subjectDescriptions.put("Квантовая теория", "Ква́нтовая тео́рия по́ля — раздел физики, изучающий поведение квантовых систем с бесконечно большим числом степеней свободы — квантовых полей; является теоретической основой описания микрочастиц, их взаимодействий и превращений.");
         subjectDescriptions.put("ООП", "Объе́ктно-ориенти́рованное программи́рование — методология программирования, основанная на представлении программы в виде совокупности объектов, каждый из которых является экземпляром определённого класса, а классы образуют иерархию наследования.");
         subjectDescriptions.put("Введение в программирование", "Курс \"Введение в программирование\" (и аналогичный \"Основы программирования\") учат правильному инженерному подходу к решению задач");
-        subjectDescriptions.put("Алгоритмы и структуры данных", "Алгоритм — такое хитроумное название для последовательности совершаемых действий. Структуры данных реализованы с помощью алгоритмов, алгоритмы — с помощью структур данных.");
+//        subjectDescriptions.put("Алгоритмы и структуры данных", "Алгоритм — такое хитроумное название для последовательности совершаемых действий. Структуры данных реализованы с помощью алгоритмов, алгоритмы — с помощью структур данных.");
+        subjectDescriptions.put("algorithms", "Algorythms are the");
         subjectDescriptions.put("Теория вероятности", "Тео́рия вероя́тностей — раздел математики, изучающий случайные события, случайные величины, их свойства и операции над ними.");
         return subjectDescriptions;
     }
@@ -51,6 +59,7 @@ public class DataService {
         subjectCollection.drop();
         List<Document> subjectList = new ArrayList<>();
         Map<String, String> subjects = setSubjectDescriptions();
+        subjectCollection.createIndex(Indexes.text("description"));
         int subjectAmount = 10;
         Iterator<Map.Entry<String, String>> it = subjects.entrySet().iterator();
         for (int i = startIndex; it.hasNext(); i++) {
@@ -76,6 +85,22 @@ public class DataService {
             pairsList.add(document);
         }
         pairsCollection.insertMany(pairsList);
+    }
+
+    public void printSubjectByDesc() {
+        MongoCollection<Document> collection = mongoTemplate.getCollection("Subject");
+        TextSearchOptions options = new TextSearchOptions().caseSensitive(true);
+        Bson filter = Filters.text("Algorythms are the", options);
+        Document doc = collection.find(filter).first();
+        assert doc != null;
+        System.out.println(doc.toJson());
+
+    }
+    public void printIndexes() {
+        MongoCollection<Document> collection = mongoTemplate.getCollection("Subject");
+        for (Document index : collection.listIndexes()) {
+            System.out.println(index.toJson());
+        }
     }
     public void printTable() {
         FindIterable<Document> groupCollection = mongoTemplate.getCollection("Group").find();

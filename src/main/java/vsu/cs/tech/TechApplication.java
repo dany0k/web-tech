@@ -14,8 +14,10 @@ public class TechApplication {
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(TechApplication.class);
         DataService data = context.getBean(DataService.class);
-        data.insertData();
-        data.printTable();
+//        data.insertData();
+//        data.printTable();
+        data.printIndexes();
+        data.printSubjectByDesc();
     }
 
 }
