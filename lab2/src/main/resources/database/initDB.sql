@@ -1,7 +1,3 @@
-drop table if exists student_group cascade;
-drop table if exists pairs cascade;
-drop table if exists subject cascade;
-
 CREATE TABLE IF NOT EXISTS student_group
 (
     group_id SERIAL PRIMARY KEY,
