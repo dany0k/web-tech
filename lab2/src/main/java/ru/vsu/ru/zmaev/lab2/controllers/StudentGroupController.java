@@ -1,8 +1,8 @@
 package ru.vsu.ru.zmaev.lab2.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import net.minidev.json.JSONObject;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import ru.vsu.ru.zmaev.lab2.models.Group;
 import ru.vsu.ru.zmaev.lab2.services.StudentGroupService;
 
@@ -17,8 +17,52 @@ public class StudentGroupController {
         this.service = service;
     }
 
-    @GetMapping("/groups")
+    @GetMapping("/group")
     public List<Group> findAllGroups() {
         return service.getAllGroups();
+    }
+
+    @GetMapping("/group/{id}")
+    public ResponseEntity<?> findGroupById(@PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok(service.getGroupById(id));
+        } catch (IllegalArgumentException e) {
+            JSONObject resp = new JSONObject();
+            resp.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(resp);
+        }
+    }
+
+    @PostMapping("group/create")
+    public ResponseEntity<?> createGroup(@RequestBody Group group) {
+        try {
+            return ResponseEntity.ok(service.addGroup(group));
+        } catch (IllegalArgumentException e) {
+            JSONObject resp = new JSONObject();
+            resp.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(resp);
+        }
+    }
+
+    @PutMapping("/group/{id}/update")
+    public ResponseEntity<?> updateGroup(@PathVariable Integer id, @RequestBody Group group) {
+        try {
+            return ResponseEntity.ok(service.updateGroup(id, group));
+        } catch (IllegalArgumentException e) {
+            JSONObject resp = new JSONObject();
+            resp.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(resp);
+        }
+    }
+
+    @DeleteMapping("/group/{id}/delete")
+    public ResponseEntity<?> deleteGroup(@PathVariable Integer id) throws Exception {
+        try {
+            return ResponseEntity.ok(service.deleteGroup(id));
+        } catch (IllegalArgumentException e) {
+            JSONObject resp = new JSONObject();
+            resp.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(resp);
+        }
     }
 }
