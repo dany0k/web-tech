@@ -56,7 +56,7 @@ public class StudentGroupController {
     }
 
     @DeleteMapping("/group/{id}/delete")
-    public ResponseEntity<?> deleteGroup(@PathVariable Integer id) throws Exception {
+    public ResponseEntity<?> deleteGroup(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(service.deleteGroup(id));
         } catch (IllegalArgumentException e) {

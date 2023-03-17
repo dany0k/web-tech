@@ -3,28 +3,36 @@ package ru.vsu.ru.zmaev.lab2.controllers;
 import net.minidev.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.vsu.ru.zmaev.lab2.models.Group;
 import ru.vsu.ru.zmaev.lab2.models.Pairs;
-import ru.vsu.ru.zmaev.lab2.models.Subject;
-import ru.vsu.ru.zmaev.lab2.services.PairsService;
-
+import ru.vsu.ru.zmaev.lab2.services.PairService;
 import java.util.List;
 
 @RestController
-public class PairsController {
+public class PairController {
 
-    private final PairsService service;
+    private final PairService service;
 
-    public PairsController(PairsService service) {
+    public PairController(PairService service) {
         this.service = service;
     }
 
-    @GetMapping("/pairs")
+    @GetMapping("/pair")
     public List<Pairs> getAllPairs() {
         return service.getAllPairs();
     }
 
-    @GetMapping("/pairs/subject/{id}")
+    @GetMapping("/pair/{id}")
+    public ResponseEntity<?> getPairsById(@PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok(service.getPairById(id));
+        } catch (IllegalArgumentException e) {
+            JSONObject resp = new JSONObject();
+            resp.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(resp);
+        }
+    }
+
+    @GetMapping("/pair/subject/{id}")
     public ResponseEntity<?> getPairsBySubjectId(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(service.getPairBySubjectId(id));
@@ -35,7 +43,7 @@ public class PairsController {
         }
     }
 
-    @GetMapping("/pairs/group/{id}")
+    @GetMapping("/pair/group/{id}")
     public ResponseEntity<?> getPairsByGroupId(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(service.getPairByGroupId(id));
@@ -46,10 +54,12 @@ public class PairsController {
         }
     }
 
-    @PostMapping("pairs/create")
-    public ResponseEntity<?> createPair(@RequestBody Pairs pairs) {
+    @PostMapping("pair/create/group/{groupId}/subject/{subjectId}")
+    public ResponseEntity<?> createPair(@RequestBody Pairs pairs,
+                                        @PathVariable Integer groupId,
+                                        @PathVariable Integer subjectId) {
         try {
-            return ResponseEntity.ok(service.addPairs(pairs));
+            return ResponseEntity.ok(service.addPairs(pairs, groupId, subjectId));
         } catch (IllegalArgumentException e) {
             JSONObject resp = new JSONObject();
             resp.put("message", e.getMessage());
@@ -57,7 +67,7 @@ public class PairsController {
         }
     }
 
-    @PutMapping("/pairs/{id}/update")
+    @PutMapping("/pair/{id}/update")
     public ResponseEntity<?> updatePairs(@PathVariable Integer id, @RequestBody Pairs pairs) {
         try {
             return ResponseEntity.ok(service.updatePairs(id, pairs));
@@ -68,7 +78,7 @@ public class PairsController {
         }
     }
 
-    @DeleteMapping("/pairs/{id}/delete")
+    @DeleteMapping("/pair/{id}/delete")
     public ResponseEntity<?> deletePairs(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(service.deletePairs(id));
@@ -79,4 +89,3 @@ public class PairsController {
         }
     }
 }
-
