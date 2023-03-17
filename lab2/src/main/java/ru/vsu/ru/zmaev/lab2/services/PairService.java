@@ -1,21 +1,25 @@
 package ru.vsu.ru.zmaev.lab2.services;
 
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.vsu.ru.zmaev.lab2.models.Pairs;
-import ru.vsu.ru.zmaev.lab2.repositories.PairsRepository;
+import ru.vsu.ru.zmaev.lab2.repositories.PairRepository;
 
 import java.time.LocalTime;
-import java.util.Date;
 import java.util.List;
 
 @Service
-public class PairsService {
+public class PairService {
 
-    private PairsRepository repository;
+    private final StudentGroupService studentGroupService;
+    private final SubjectService subjectService;
+    private PairRepository repository;
 
-    public PairsService(PairsRepository repository) {
+    public PairService(PairRepository repository,
+                       StudentGroupService studentGroupService,
+                       SubjectService subjectService) {
+        this.studentGroupService = studentGroupService;
+        this.subjectService = subjectService;
         this.repository = repository;
     }
 
@@ -35,16 +39,17 @@ public class PairsService {
         return repository.findByStudentGroupId(id).orElseThrow(() -> new IllegalArgumentException("Nu such pair"));
     }
 
-    public Pairs addPairs(Pairs pairs) {
+    public Pairs addPairs(Pairs pairs, Integer groupId, Integer subjectId) {
+        pairs.setStudentGroup(studentGroupService.getGroupById(groupId));
+        pairs.setSubject(subjectService.getSubjectById(subjectId));
         return repository.save(pairs);
     }
 
     public Pairs updatePairs(Integer id, Pairs pairs) throws IllegalArgumentException {
         return repository.findByPairsId(id).map(p -> {
-            p.setPairsId(pairs.getPairsId());
             p.setSubject(p.getSubject());
             p.setStudentGroup(p.getStudentGroup());
-            p.setTimeSeries(LocalTime.MAX);
+            p.setTimestamp(LocalTime.MAX);
             return repository.save(p);
         }).orElseThrow(() -> new IllegalArgumentException("No such pair"));
     }

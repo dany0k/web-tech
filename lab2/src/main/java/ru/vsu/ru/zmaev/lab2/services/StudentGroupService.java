@@ -33,7 +33,6 @@ public class StudentGroupService {
 
     public Group updateGroup(Integer id, Group group) throws IllegalArgumentException {
         return repository.findById(id).map(g -> {
-            g.setGroupId(group.getGroupId());
             g.setNumber(group.getNumber());
             return repository.save(g);
         }).orElseThrow(() -> new IllegalArgumentException("No such group"));

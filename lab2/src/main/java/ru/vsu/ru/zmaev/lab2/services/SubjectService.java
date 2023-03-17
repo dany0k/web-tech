@@ -1,6 +1,5 @@
 package ru.vsu.ru.zmaev.lab2.services;
 
-import org.jvnet.staxex.BinaryText;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.vsu.ru.zmaev.lab2.models.Subject;
@@ -24,6 +23,7 @@ public class SubjectService {
         return repository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("No such subject"));
     }
+
     public Subject getSubjectByDescription(String description) {
         return repository.findByDescription(description).orElseThrow(() ->
                 new IllegalArgumentException("Nu such subject"));
@@ -40,7 +40,6 @@ public class SubjectService {
 
     public Subject updateSubject(Integer id, Subject subject) throws IllegalArgumentException {
         return repository.findById(id).map(s -> {
-            s.setSubjectId(subject.getSubjectId());
             s.setName(subject.getName());
             s.setDescription(subject.getDescription());
             return repository.save(s);
