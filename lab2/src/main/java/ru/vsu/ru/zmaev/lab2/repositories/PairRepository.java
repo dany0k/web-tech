@@ -7,7 +7,7 @@ import ru.vsu.ru.zmaev.lab2.models.Pairs;
 import java.util.List;
 import java.util.Optional;
 
-public interface PairsRepository extends CrudRepository<Pairs, Integer> {
+public interface PairRepository extends CrudRepository<Pairs, Integer> {
     List<Pairs> findAll();
 
     Optional<Pairs> findByPairsId(Integer id);
