@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.LocalTime;
 
 @Entity
@@ -15,18 +14,18 @@ import java.time.LocalTime;
 public class Pairs {
 
     @Id
-    @GeneratedValue
-    @Column(name = "pairs_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private int pairsId;
 
     @ManyToOne()
-    @JoinColumn(name = "subject_id", referencedColumnName = "subject_id")
+    @JoinColumn(name = "subject_id", referencedColumnName = "id")
     private Subject subject;
 
     @ManyToOne()
-    @JoinColumn(name = "group_id", referencedColumnName = "group_id")
+    @JoinColumn(name = "group_id", referencedColumnName = "id")
     private Group studentGroup;
 
-    @Column(name = "timeseries")
-    private LocalTime timeSeries;
+    @Column(name = "timestamp")
+    private LocalTime timestamp;
 }
