@@ -13,7 +13,7 @@ public class PairService {
 
     private final StudentGroupService studentGroupService;
     private final SubjectService subjectService;
-    private PairRepository repository;
+    private final PairRepository repository;
 
     public PairService(PairRepository repository,
                        StudentGroupService studentGroupService,
