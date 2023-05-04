@@ -1,21 +1,21 @@
 CREATE TABLE IF NOT EXISTS student_group
 (
-    group_id SERIAL PRIMARY KEY,
-    number INTEGER NOT NULL
+    id SERIAL PRIMARY KEY,
+    number INTEGER UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS subject
 (
-    subject_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name CHARACTER VARYING(100) UNIQUE NOT NULL,
     description CHARACTER VARYING(255) UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS pairs
 (
-    pairs_id SERIAL PRIMARY KEY,
-    group_id INTEGER REFERENCES student_group (group_id) ON DELETE CASCADE,
-    subject_id INTEGER REFERENCES subject (subject_id) ON DELETE CASCADE,
+    id SERIAL PRIMARY KEY,
+    group_id INTEGER REFERENCES student_group (id) ON DELETE CASCADE,
+    subject_id INTEGER REFERENCES subject (id) ON DELETE CASCADE,
     timestamp TIMESTAMP NOT NULL
 );
 
