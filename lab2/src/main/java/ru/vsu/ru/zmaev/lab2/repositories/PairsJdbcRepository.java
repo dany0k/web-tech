@@ -13,7 +13,6 @@ public interface PairsJdbcRepository extends JpaRepository<Pairs, Long> {
     @Query(
             value = "insert into pairs(group_id, subject_id, timestamp) " +
                     "values (:groupId, :subjectId, :time)" +
-//                    "on conflict(subject_id, group_id) do nothing " +
                     "returning id",
             nativeQuery = true
     )

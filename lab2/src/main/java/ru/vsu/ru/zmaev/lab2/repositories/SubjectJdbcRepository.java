@@ -11,9 +11,9 @@ public interface SubjectJdbcRepository extends JpaRepository<Subject, Long> {
     @Query(
             value = "insert into subject(name, description) " +
                     "values (:name, :description) " +
-//                    "on conflict (name, description) do nothing " +
+                    "on conflict (name) do update set " +
+                    "name = excluded.name " +
                     "returning id;",
-//                    "name = excluded.name, description = excluded.description " +
             nativeQuery = true
     )
     Long saveCustom(@Param("name") String name, @Param("description") String description);

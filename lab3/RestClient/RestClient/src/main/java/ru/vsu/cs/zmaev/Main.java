@@ -9,7 +9,7 @@ public class Main {
         Runnable run = () -> {
             try {
                 RestClient client = new RestClient();
-                int count = 100;
+                int count = 1000000;
                 for (int i = 0; i < count; i++) {
                     client.post();
                 }
