@@ -47,7 +47,7 @@ public class RestClient {
         SubjectGroupDto dto = new SubjectGroupDto();
         Random random = new Random();
         dto.setSubjectName(subjectNames[random.nextInt(subjectNames.length)]);
-        dto.setGroupNum(random.nextInt());
+        dto.setGroupNum(random.nextInt(Integer.SIZE - 1));
         Faker faker = new Faker(new Locale("en-US"));
         dto.setSubjectDesc(faker.random().toString());
         dto.setTimestamp(LocalTime.now());
